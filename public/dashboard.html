@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard — Laundry App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/dashboard.css" />
+  </head>
+  <body>
+
+    <!-- Blob background — sama dengan halaman login -->
+    <div class="bg-canvas" aria-hidden="true">
+      <div class="bg-blob bg-blob--1"></div>
+      <div class="bg-blob bg-blob--2"></div>
+      <div class="bg-blob bg-blob--3"></div>
+    </div>
+
+    <div class="page">
+      <div class="card">
+
+        <!-- Badge login berhasil -->
+        <div class="badge-success">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          LOGIN BERHASIL
+        </div>
+
+        <!-- Ikon mesin cuci (sama dengan login) -->
+        <div class="card-icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none">
+            <circle cx="16" cy="18" r="8.5" stroke="#fff" stroke-width="2"/>
+            <circle cx="16" cy="18" r="4.5" stroke="rgba(255,255,255,0.55)" stroke-width="1.8"/>
+            <rect x="9" y="6" width="14" height="4" rx="2" fill="rgba(255,255,255,0.9)"/>
+            <circle cx="11" cy="8" r="1.2" fill="#3ec6c8"/>
+          </svg>
+        </div>
+
+        <!-- Greeting — diisi JS -->
+        <h1 id="greeting">Halo!</h1>
+
+        <!-- Subtitle — diisi JS -->
+        <p>
+          Anda masuk sebagai <strong id="user-label">Pengguna</strong>.<br/>
+          Dashboard Laundry App sedang dalam pengembangan.
+        </p>
+
+        <div class="divider"></div>
+
+        <!-- Tombol logout -->
+        <button class="btn-logout" id="logout-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Keluar dari Laundry App
+        </button>
+
+      </div>
+    </div>
+
+    <script src="/js/auth-session.js"></script>
+    <script src="/js/dashboard.js"></script>
+  </body>
+</html>

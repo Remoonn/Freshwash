@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Masuk — FreshWash Laundry App</title>
+    <meta name="description" content="Masuk atau daftar ke FreshWash — aplikasi manajemen laundry modern untuk bisnis Anda." />
+
+    <!-- Google Fonts: Inter (UI) + Roboto (tombol Google) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto:wght@500&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="/css/auth.css" />
+
+    <!-- Google Identity Services SDK resmi -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+  </head>
+  <body>
+    <!-- ====== LATAR BACKGROUND PARTIKEL ====== -->
+    <div class="bg-canvas" aria-hidden="true">
+      <div class="bg-blob bg-blob--1"></div>
+      <div class="bg-blob bg-blob--2"></div>
+      <div class="bg-blob bg-blob--3"></div>
+    </div>
+
+    <main class="page">
+      <!-- ====== SHELL / WRAPPER UTAMA ====== -->
+      <section class="shell" aria-label="Autentikasi FreshWash Laundry App">
+
+        <!-- ====== KOLOM KIRI: HERO / ILUSTRASI ====== -->
+        <aside class="hero" aria-hidden="true">
+          <!-- Brand -->
+          <div class="brand-mark">
+            <div class="brand-icon">
+              <svg viewBox="0 0 32 32" fill="none">
+                <circle cx="16" cy="18" r="8.5" stroke="#fff" stroke-width="2" />
+                <circle cx="16" cy="18" r="4.5" stroke="rgba(255,255,255,0.6)" stroke-width="1.8" />
+                <rect x="9" y="6" width="14" height="4" rx="2" fill="rgba(255,255,255,0.9)" />
+                <circle cx="11" cy="8" r="1.2" fill="rgba(62,198,200,0.9)" />
+                <circle cx="14.5" cy="8" r="1.2" fill="rgba(255,255,255,0.5)" />
+              </svg>
+            </div>
+            <span>FreshWash</span>
+          </div>
+
+          <!-- Tagline -->
+          <div class="hero-content">
+            <h1>Pakaian bersih,<br/>hidup lebih ringan.</h1>
+            <p>Kelola pesanan, pantau status cucian, dan nikmati layanan antar-jemput — semuanya dalam satu platform.</p>
+
+            <!-- Stats / fitur singkat -->
+            <div class="hero-stats">
+              <div class="stat-item">
+                <span class="stat-num">500+</span>
+                <span class="stat-label">Pelanggan</span>
+              </div>
+              <div class="stat-divider"></div>
+              <div class="stat-item">
+                <span class="stat-num">24/7</span>
+                <span class="stat-label">Layanan</span>
+              </div>
+              <div class="stat-divider"></div>
+              <div class="stat-item">
+                <span class="stat-num">4.9★</span>
+                <span class="stat-label">Rating</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ilustrasi mesin cuci SVG -->
+          <div class="hero-art">
+            <svg class="washing-machine" viewBox="0 0 260 280" fill="none">
+              <!-- Body mesin -->
+              <rect x="30" y="20" width="200" height="240" rx="28" fill="white" fill-opacity="0.12" />
+              <rect x="30" y="20" width="200" height="240" rx="28" stroke="white" stroke-opacity="0.25" stroke-width="1.5" />
+              <!-- Panel atas -->
+              <rect x="50" y="40" width="160" height="30" rx="10" fill="white" fill-opacity="0.15" />
+              <!-- Tombol panel -->
+              <circle cx="70" cy="55" r="7" fill="rgba(62,198,200,0.8)" />
+              <circle cx="90" cy="55" r="5" fill="rgba(255,255,255,0.4)" />
+              <circle cx="108" cy="55" r="5" fill="rgba(255,255,255,0.4)" />
+              <!-- Layar kecil -->
+              <rect x="150" y="46" width="48" height="18" rx="5" fill="rgba(62,198,200,0.3)" />
+              <rect x="155" y="51" width="30" height="8" rx="3" fill="rgba(62,198,200,0.6)" />
+              <!-- Drum besar -->
+              <circle cx="130" cy="168" r="78" fill="white" fill-opacity="0.08" />
+              <circle cx="130" cy="168" r="78" stroke="white" stroke-opacity="0.3" stroke-width="2.5" />
+              <circle cx="130" cy="168" r="60" fill="rgba(62,198,200,0.12)" />
+              <circle cx="130" cy="168" r="60" stroke="rgba(62,198,200,0.5)" stroke-width="2" />
+              <!-- Bilah drum -->
+              <path d="M130 108 C155 130 155 206 130 228" stroke="white" stroke-opacity="0.2" stroke-width="1.5" />
+              <path d="M130 108 C105 130 105 206 130 228" stroke="white" stroke-opacity="0.2" stroke-width="1.5" />
+              <!-- Kaca drum -->
+              <circle cx="130" cy="168" r="40" fill="rgba(30,100,170,0.35)" />
+              <circle cx="130" cy="168" r="40" stroke="white" stroke-opacity="0.2" stroke-width="1.5" />
+              <!-- Pakaian dalam drum (dekoratif) -->
+              <path d="M110 168 Q120 155 130 168 Q140 181 150 168" stroke="rgba(255,255,255,0.5)" stroke-width="3" stroke-linecap="round" fill="none" />
+              <!-- Highlight kaca -->
+              <ellipse cx="120" cy="155" rx="10" ry="6" fill="white" fill-opacity="0.18" transform="rotate(-20 120 155)" />
+              <!-- Handle -->
+              <rect x="118" y="245" width="24" height="6" rx="3" fill="white" fill-opacity="0.3" />
+            </svg>
+
+            <!-- Gelembung animasi -->
+            <div class="bubbles">
+              <span class="bubble bubble--sm"></span>
+              <span class="bubble bubble--md"></span>
+              <span class="bubble bubble--lg"></span>
+              <span class="bubble bubble--xs"></span>
+              <span class="bubble bubble--sm bubble--delay2"></span>
+            </div>
+          </div>
+
+          <!-- Fitur badge -->
+          <div class="hero-badges">
+            <div class="badge">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                <path d="M9 12l2 2 4-4M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              </svg>
+              Antar-Jemput Gratis
+            </div>
+            <div class="badge">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              Tracking Real-time
+            </div>
+          </div>
+        </aside>
+
+        <!-- ====== KOLOM KANAN: PANEL FORM ====== -->
+        <div class="panel">
+          <!-- Logo kecil di atas form -->
+          <div class="logo-row">
+            <div class="logo-icon">
+              <svg width="24" height="24" viewBox="0 0 32 32" fill="none">
+                <circle cx="16" cy="18" r="8.5" stroke="currentColor" stroke-width="2" />
+                <circle cx="16" cy="18" r="4.5" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.5" />
+                <rect x="9" y="6" width="14" height="4" rx="2" fill="currentColor" fill-opacity="0.8" />
+                <circle cx="11" cy="8" r="1.2" fill="currentColor" />
+              </svg>
+            </div>
+            <div class="logo-text">
+              <h2>Laundry App</h2>
+              <p id="panel-subtitle">Selamat datang kembali!</p>
+            </div>
+          </div>
+
+          <!-- Tab switcher Login / Register -->
+          <div class="tab-bar" role="tablist">
+            <button
+              class="tab-btn is-active"
+              role="tab"
+              id="tab-login"
+              aria-selected="true"
+              aria-controls="view-login"
+              data-switch="login"
+            >
+              Masuk
+            </button>
+            <button
+              class="tab-btn"
+              role="tab"
+              id="tab-register"
+              aria-selected="false"
+              aria-controls="view-register"
+              data-switch="register"
+            >
+              Daftar
+            </button>
+            <div class="tab-indicator" id="tab-indicator"></div>
+          </div>
+
+          <!-- ====== FORM LOGIN ====== -->
+          <section id="view-login" class="view is-active" role="tabpanel" aria-labelledby="tab-login">
+            <form id="form-login" novalidate>
+              <!-- Banner pesan global (error/sukses) -->
+              <div class="form-banner" hidden></div>
+
+              <label class="field" for="login-identifier">
+                <span class="field-label">Username atau Email</span>
+                <div class="input-wrap">
+                  <!-- Ikon user -->
+                  <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.8"/>
+                    <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  </svg>
+                  <input
+                    id="login-identifier"
+                    type="text"
+                    name="identifier"
+                    autocomplete="username"
+                    placeholder="nama@email.com atau username"
+                  />
+                </div>
+                <small class="field-error" data-error-for="identifier"></small>
+              </label>
+
+              <label class="field" for="login-password">
+                <span class="field-label">Password</span>
+                <div class="input-wrap">
+                  <!-- Ikon kunci -->
+                  <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.8"/>
+                    <path d="M8 11V7a4 4 0 118 0v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  </svg>
+                  <input
+                    id="login-password"
+                    type="password"
+                    name="password"
+                    autocomplete="current-password"
+                    placeholder="Masukkan password"
+                  />
+                  <button
+                    type="button"
+                    class="eye-btn"
+                    data-toggle-password
+                    aria-controls="login-password"
+                    aria-label="Tampilkan password"
+                  >
+                    <svg class="eye-icon eye-icon--show" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="1.8"/>
+                      <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/>
+                    </svg>
+                    <svg class="eye-icon eye-icon--hide" width="16" height="16" viewBox="0 0 24 24" fill="none" style="display:none">
+                      <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <line x1="1" y1="1" x2="23" y2="23" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                  </button>
+                </div>
+                <small class="field-error" data-error-for="password"></small>
+              </label>
+
+              <div class="row-between">
+                <a class="link-forgot" id="forgot-password" href="#lupa-password">Lupa password?</a>
+              </div>
+
+              <button class="btn btn-primary" type="submit" id="login-submit-btn">
+                <span class="spinner" aria-hidden="true"></span>
+                <span class="btn-label">Masuk ke Akun</span>
+              </button>
+            </form>
+
+            <!-- Divider atau -->
+            <div class="divider"><span>atau lanjutkan dengan</span></div>
+
+            <!-- Tombol Sign in with Google (mengikuti guideline Google) -->
+            <button type="button" class="google-btn" id="google-custom-btn">
+              <!-- Logo Google SVG resmi -->
+              <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/>
+                <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/>
+                <path fill="#FBBC05" d="M3.964 10.707A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.707V4.961H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.039l3.007-2.332z"/>
+                <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.163 6.656 3.58 9 3.58z"/>
+              </svg>
+              <span>Sign in with Google</span>
+            </button>
+
+            <!-- Container tombol Google resmi (Google Identity Services) -->
+            <div id="google-btn" class="google-official"></div>
+            <p id="google-hint" class="hint" hidden></p>
+
+            <p class="switch-line">
+              Belum punya akun?
+              <a class="link" href="/register" data-switch="register">Daftar sekarang →</a>
+            </p>
+          </section>
+
+          <!-- ====== FORM REGISTER ====== -->
+          <section id="view-register" class="view" role="tabpanel" aria-labelledby="tab-register">
+            <form id="form-register" novalidate>
+              <!-- Banner pesan global -->
+              <div class="form-banner" hidden></div>
+
+              <!-- Row 2 kolom: Nama & Username -->
+              <div class="field-row">
+                <label class="field" for="reg-fullname">
+                  <span class="field-label">Nama Lengkap</span>
+                  <div class="input-wrap">
+                    <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.8"/>
+                      <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                    <input
+                      id="reg-fullname"
+                      type="text"
+                      name="fullName"
+                      autocomplete="name"
+                      placeholder="Nama sesuai identitas"
+                    />
+                  </div>
+                  <small class="field-error" data-error-for="fullName"></small>
+                </label>
+
+                <label class="field" for="reg-username">
+                  <span class="field-label">Username</span>
+                  <div class="input-wrap">
+                    <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="1.8"/>
+                    </svg>
+                    <input
+                      id="reg-username"
+                      type="text"
+                      name="username"
+                      autocomplete="username"
+                      placeholder="budi_laundry"
+                    />
+                  </div>
+                  <small class="field-error" data-error-for="username"></small>
+                </label>
+              </div>
+
+              <label class="field" for="reg-email">
+                <span class="field-label">Email</span>
+                <div class="input-wrap">
+                  <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="1.8"/>
+                    <polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  </svg>
+                  <input
+                    id="reg-email"
+                    type="email"
+                    name="email"
+                    autocomplete="email"
+                    placeholder="nama@email.com"
+                  />
+                </div>
+                <small class="field-error" data-error-for="email"></small>
+              </label>
+
+              <label class="field" for="reg-password">
+                <span class="field-label">Password</span>
+                <div class="input-wrap">
+                  <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.8"/>
+                    <path d="M8 11V7a4 4 0 118 0v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  </svg>
+                  <input
+                    id="reg-password"
+                    type="password"
+                    name="password"
+                    autocomplete="new-password"
+                    placeholder="Minimal 8 karakter"
+                  />
+                  <button type="button" class="eye-btn" data-toggle-password aria-controls="reg-password" aria-label="Tampilkan password">
+                    <svg class="eye-icon eye-icon--show" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="1.8"/>
+                      <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/>
+                    </svg>
+                    <svg class="eye-icon eye-icon--hide" width="16" height="16" viewBox="0 0 24 24" fill="none" style="display:none">
+                      <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <line x1="1" y1="1" x2="23" y2="23" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                  </button>
+                </div>
+                <small class="field-error" data-error-for="password"></small>
+                <!-- Indikator kekuatan password -->
+                <div class="password-strength" id="password-strength" hidden>
+                  <div class="strength-bars">
+                    <span class="strength-bar"></span>
+                    <span class="strength-bar"></span>
+                    <span class="strength-bar"></span>
+                    <span class="strength-bar"></span>
+                  </div>
+                  <span class="strength-label" id="strength-label">Lemah</span>
+                </div>
+              </label>
+
+              <label class="field" for="reg-confirm">
+                <span class="field-label">Konfirmasi Password</span>
+                <div class="input-wrap">
+                  <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  </svg>
+                  <input
+                    id="reg-confirm"
+                    type="password"
+                    name="confirmPassword"
+                    autocomplete="new-password"
+                    placeholder="Ulangi password"
+                  />
+                  <button type="button" class="eye-btn" data-toggle-password aria-controls="reg-confirm" aria-label="Tampilkan password">
+                    <svg class="eye-icon eye-icon--show" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="1.8"/>
+                      <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/>
+                    </svg>
+                    <svg class="eye-icon eye-icon--hide" width="16" height="16" viewBox="0 0 24 24" fill="none" style="display:none">
+                      <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <line x1="1" y1="1" x2="23" y2="23" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                  </button>
+                </div>
+                <small class="field-error" data-error-for="confirmPassword"></small>
+              </label>
+
+              <button class="btn btn-primary" type="submit" id="register-submit-btn">
+                <span class="spinner" aria-hidden="true"></span>
+                <span class="btn-label">Buat Akun Gratis</span>
+              </button>
+            </form>
+
+            <p class="switch-line">
+              Sudah punya akun?
+              <a class="link" href="/login" data-switch="login">Masuk sekarang →</a>
+            </p>
+          </section>
+
+        </div><!-- /.panel -->
+      </section><!-- /.shell -->
+    </main>
+
+    <!-- ====== MODAL LUPA PASSWORD ====== -->
+    <div id="forgot-modal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="forgot-title">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="modal-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" stroke-width="2"/>
+              <path d="M8 11V7a4 4 0 118 0v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div>
+            <h3 id="forgot-title">Lupa Password?</h3>
+            <p>Masukkan email akun Anda untuk mendapatkan tautan reset.</p>
+          </div>
+          <button type="button" class="modal-close" id="forgot-close" aria-label="Tutup modal">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <form id="form-forgot">
+          <div id="forgot-message" class="form-banner" hidden></div>
+          <label class="field" for="forgot-email-input">
+            <span class="field-label">Email terdaftar</span>
+            <div class="input-wrap">
+              <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="1.8"/>
+                <polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+              <input id="forgot-email-input" type="email" name="forgotEmail" placeholder="nama@email.com" />
+            </div>
+          </label>
+          <div class="modal-actions">
+            <button type="button" class="btn btn-ghost" id="forgot-close-bottom">Batal</button>
+            <button type="submit" class="btn btn-primary" style="flex:1">Kirim Tautan Reset</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ====== SCRIPT ====== -->
+    <script src="/js/auth-session.js"></script>
+    <script src="/js/config.js"></script>
+    <script src="/js/validation.js"></script>
+    <script src="/js/google-auth.js"></script>
+    <script src="/js/login.js"></script>
+    <script src="/js/register.js"></script>
+    <script src="/js/auth-app.js"></script>
+  </body>
+</html>

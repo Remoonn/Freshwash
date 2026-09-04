@@ -1,0 +1,193 @@
+/* Dashboard — tema sama dengan halaman login (auth.css) */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: #f0f6ff;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ===== BLOB BACKGROUND — sama persis dengan login ===== */
+.bg-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.bg-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.45;
+}
+
+.bg-blob--1 {
+  width: 700px; height: 700px;
+  top: -200px; left: -200px;
+  background: radial-gradient(circle, #b8d8ff 0%, #d4eeff 60%, transparent 100%);
+  animation: blobMove1 18s ease-in-out infinite;
+}
+
+.bg-blob--2 {
+  width: 600px; height: 600px;
+  bottom: -150px; right: -150px;
+  background: radial-gradient(circle, #aef5f6 0%, #c5f0f0 60%, transparent 100%);
+  animation: blobMove2 22s ease-in-out infinite;
+}
+
+.bg-blob--3 {
+  width: 400px; height: 400px;
+  top: 40%; left: 55%;
+  background: radial-gradient(circle, #d7eaff 0%, transparent 70%);
+  animation: blobMove3 15s ease-in-out infinite;
+}
+
+@keyframes blobMove1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%       { transform: translate(60px, 40px) scale(1.05); }
+  66%       { transform: translate(-30px, 60px) scale(0.96); }
+}
+@keyframes blobMove2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%       { transform: translate(-50px, -40px) scale(1.08); }
+}
+@keyframes blobMove3 {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50%       { transform: translate(-50%, -50%) scale(1.15); }
+}
+
+/* ===== CARD ===== */
+.page {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: grid;
+  place-items: center;
+}
+
+.card {
+  width: min(420px, 100%);
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 24px 60px rgba(14, 50, 100, 0.14), 0 4px 16px rgba(14, 50, 100, 0.08);
+  padding: 44px 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+  animation: cardIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ===== BADGE ===== */
+.badge-success {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: linear-gradient(135deg, #e8f6ff, #d2f5f6);
+  color: #1452a0;
+  border: 1px solid rgba(26, 106, 199, 0.2);
+  border-radius: 100px;
+  padding: 7px 18px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.badge-success svg { color: #14bfca; flex-shrink: 0; }
+
+/* ===== ICON MESIN CUCI (dekoratif, sama seperti hero login) ===== */
+.card-icon {
+  width: 68px;
+  height: 68px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #1452a0 0%, #1490b0 60%, #14bfca 100%);
+  display: grid;
+  place-items: center;
+  margin-bottom: 4px;
+  box-shadow: 0 8px 24px rgba(20, 82, 160, 0.25);
+}
+
+.card-icon svg { width: 34px; height: 34px; }
+
+/* ===== HEADING ===== */
+h1 {
+  color: #0f2742;
+  font-size: 1.9rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.15;
+  margin-top: 2px;
+}
+
+/* ===== SUBTITLE ===== */
+p {
+  color: #6b8399;
+  font-size: 0.9rem;
+  line-height: 1.65;
+  max-width: 30ch;
+  margin: 0 auto;
+}
+
+p strong {
+  color: #1a6ac7;
+  font-weight: 700;
+}
+
+/* ===== DIVIDER ===== */
+.divider {
+  width: 100%;
+  height: 1px;
+  background: #e4eef8;
+  margin: 4px 0;
+}
+
+/* ===== TOMBOL LOGOUT ===== */
+.btn-logout {
+  width: 100%;
+  padding: 0 20px;
+  min-height: 48px;
+  background: linear-gradient(135deg, #2685e0 0%, #1452a0 100%);
+  color: #fff;
+  border: 0;
+  border-radius: 12px;
+  font: 700 0.93rem "Inter", sans-serif;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 8px 20px rgba(22, 106, 199, 0.3);
+  transition: box-shadow 0.18s, transform 0.18s, filter 0.18s;
+  margin-top: 4px;
+}
+
+.btn-logout:hover {
+  box-shadow: 0 12px 28px rgba(22, 106, 199, 0.4);
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+}
+
+.btn-logout:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 16px rgba(22, 106, 199, 0.25);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 480px) {
+  .card { padding: 32px 22px; }
+  h1 { font-size: 1.6rem; }
+}

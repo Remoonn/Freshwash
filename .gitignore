@@ -1,0 +1,19 @@
+# Dependensi Node.js — jangan diupload, install ulang dengan "npm install"
+node_modules/
+
+# File environment (berisi API key, password, dsb.) — JANGAN diupload!
+.env
+.env.local
+.env.*.local
+
+# Log
+npm-debug.log*
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
