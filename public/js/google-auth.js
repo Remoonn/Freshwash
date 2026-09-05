@@ -16,6 +16,7 @@
   "use strict";
 
   let initialized = false;
+  let initializationPromise = null;
 
   /** Cek apakah Client ID masih placeholder */
   function isPlaceholderClientId(clientId) {
@@ -51,38 +52,44 @@
    * Inisialisasi Google Identity Services.
    * Dipanggil sekali sebelum renderButton atau prompt.
    */
-  function initialize(onSuccess, onError) {
-    const clientId = window.LAUNDRY_CONFIG.googleClientId;
-
-    if (isPlaceholderClientId(clientId)) {
-      // Mode demo — simulasi login berhasil
-      onError("mode_demo");
-      return;
-    }
+  async function initialize(onSuccess, onError) {
+    if (initialized) return true;
 
     if (!global.google?.accounts?.id) {
       onError("Google Identity Services belum dimuat. Cek koneksi internet.");
-      return;
+      return false;
     }
 
-    if (initialized) return;
+    if (!initializationPromise) {
+      initializationPromise = fetch(window.LAUNDRY_CONFIG.api.googleConfig)
+        .then((response) => response.ok ? response.json() : Promise.reject(new Error("Google OAuth belum dikonfigurasi.")))
+        .then((config) => {
+          window.LAUNDRY_CONFIG.googleClientId = config.clientId;
+          global.google.accounts.id.initialize({
+            client_id: config.clientId,
+            callback: async (response) => {
+              try {
+                const result = await sendCredentialToServer(response.credential);
+                const profile = decodeJwtPayload(response.credential);
+                onSuccess(result, profile);
+              } catch (err) {
+                onError(err.message || "Gagal memproses login Google.");
+              }
+            },
+            auto_select: false,
+            cancel_on_tap_outside: true,
+          });
+          initialized = true;
+          return true;
+        })
+        .catch((error) => {
+          initializationPromise = null;
+          onError(error.message);
+          return false;
+        });
+    }
 
-    global.google.accounts.id.initialize({
-      client_id:          clientId,
-      callback:           async (response) => {
-        try {
-          const result  = await sendCredentialToServer(response.credential);
-          const profile = decodeJwtPayload(response.credential);
-          onSuccess(result, profile);
-        } catch (err) {
-          onError(err.message || "Gagal memproses login Google.");
-        }
-      },
-      auto_select:        false,
-      cancel_on_tap_outside: true,
-    });
-
-    initialized = true;
+    return initializationPromise;
   }
 
   /**
@@ -90,17 +97,18 @@
    * (Digunakan jika Client ID nyata tersedia)
    */
   function renderButton(container, onSuccess, onError) {
-    initialize(onSuccess, onError);
-    if (!initialized) return;
+    initialize(onSuccess, onError).then((ready) => {
+      if (!ready) return;
 
-    global.google.accounts.id.renderButton(container, {
+      global.google.accounts.id.renderButton(container, {
       type:           "standard",
       theme:          "outline",
       size:           "large",
       text:           "signin_with",
       shape:          "rectangular",
       logo_alignment: "left",
-      width:          container.offsetWidth || 320,
+        width: container.offsetWidth || 320,
+      });
     });
   }
 
@@ -108,9 +116,11 @@
    * Tampilkan One Tap prompt Google.
    */
   function prompt(onSuccess, onError) {
-    initialize(onSuccess, onError);
-    if (!initialized) return;
-    global.google.accounts.id.prompt();
+    initialize(onSuccess, onError).then((ready) => {
+      if (!ready) return;
+      global.google.accounts.id.disableAutoSelect();
+      global.google.accounts.id.prompt();
+    });
   }
 
   /**

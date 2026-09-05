@@ -37,12 +37,6 @@
       errors.email = "Format email tidak valid.";
     }
 
-    if (!data.username || data.username.trim().length < 3) {
-      errors.username = "Username minimal 3 karakter.";
-    } else if (!/^[a-zA-Z0-9._]+$/.test(data.username.trim())) {
-      errors.username = "Username hanya boleh huruf, angka, titik, dan underscore.";
-    }
-
     if (!data.password) {
       errors.password = "Password wajib diisi.";
     } else if (data.password.length < 8) {

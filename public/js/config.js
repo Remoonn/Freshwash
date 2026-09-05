@@ -9,5 +9,6 @@ window.LAUNDRY_CONFIG = {
     login: "/api/auth/login",
     register: "/api/auth/register",
     google: "/api/auth/google",
+    googleConfig: "/api/auth/google/config",
   },
 };

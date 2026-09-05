@@ -4,6 +4,10 @@
  */
 const path = require("path");
 const express = require("express");
+const { OAuth2Client } = require("google-auth-library");
+
+const googleClientId = process.env.GOOGLE_CLIENT_ID || "";
+const googleClient = new OAuth2Client(googleClientId);
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -55,9 +59,9 @@ app.post("/api/auth/login", (req, res) => {
  * Placeholder registrasi. Validasi utama ada di frontend; backend tetap cek ulang.
  */
 app.post("/api/auth/register", (req, res) => {
-  const { fullName, email, username, password } = req.body;
+  const { fullName, email, password } = req.body;
 
-  if (!fullName || !email || !username || !password) {
+  if (!fullName || !email || !password) {
     return res.status(400).json({
       ok: false,
       message: "Semua field registrasi wajib diisi.",
@@ -75,7 +79,7 @@ app.post("/api/auth/register", (req, res) => {
   return res.status(201).json({
     ok: true,
     message: "Akun berhasil dibuat (demo).",
-    user: { fullName, email, username },
+    user: { fullName, email },
   });
 });
 
@@ -84,21 +88,48 @@ app.post("/api/auth/register", (req, res) => {
  * Menerima credential JWT dari Google Identity Services.
  * Verifikasi token di server dengan google-auth-library sebelum produksi.
  */
-app.post("/api/auth/google", (req, res) => {
+app.get("/api/auth/google/config", (_req, res) => {
+  if (!googleClientId) {
+    return res.status(503).json({ ok: false, message: "Google OAuth belum dikonfigurasi di server." });
+  }
+
+  return res.json({ ok: true, clientId: googleClientId });
+});
+
+app.post("/api/auth/google", async (req, res) => {
   const { credential } = req.body;
 
-  if (!credential) {
+  if (!credential || !googleClientId) {
     return res.status(400).json({
       ok: false,
-      message: "Credential Google tidak ditemukan.",
+      message: "Login Google belum dikonfigurasi dengan benar.",
     });
   }
 
-  // TODO: verifyIdToken({ idToken: credential, audience: GOOGLE_CLIENT_ID })
-  return res.json({
-    ok: true,
-    message: "Login Google diterima (demo, token belum diverifikasi).",
-  });
+  try {
+    const ticket = await googleClient.verifyIdToken({
+      idToken: credential,
+      audience: googleClientId,
+    });
+    const payload = ticket.getPayload();
+
+    if (!payload?.sub || !payload.email || !payload.email_verified) {
+      return res.status(401).json({ ok: false, message: "Akun Google tidak dapat diverifikasi." });
+    }
+
+    return res.json({
+      ok: true,
+      message: "Login Google berhasil.",
+      user: {
+        id: payload.sub,
+        fullName: payload.name || payload.email,
+        email: payload.email,
+        avatar: payload.picture || null,
+      },
+    });
+  } catch (_error) {
+    return res.status(401).json({ ok: false, message: "Credential Google tidak valid atau sudah kedaluwarsa." });
+  }
 });
 
 app.listen(PORT, () => {
