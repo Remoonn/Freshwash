@@ -764,7 +764,15 @@ body {
   content: "";
   height: 1px;
   background: var(--line);
+  }
+
+.google-signin-button {
+  display: flex;
+  justify-content: center;
+  min-height: 44px;
+  overflow: hidden;
 }
+
 
 /* ====================== SWITCH LINE ====================== */
 .switch-line {

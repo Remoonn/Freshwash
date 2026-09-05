@@ -4,7 +4,10 @@
  */
 const path = require("path");
 const express = require("express");
+const { OAuth2Client } = require("google-auth-library");
 const app = express();
+const googleClientId = process.env.GOOGLE_CLIENT_ID || "";
+const googleClient = new OAuth2Client(googleClientId);
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
@@ -52,6 +55,37 @@ app.post("/api/auth/login", (req, res) => {
  * POST /api/auth/register
  * Placeholder registrasi. Validasi utama ada di frontend; backend tetap cek ulang.
  */
+app.get("/api/auth/google/config", (_req, res) => {
+  if (!googleClientId) return res.status(503).json({ ok: false, message: "Google Sign-In belum dikonfigurasi." });
+  return res.json({ ok: true, clientId: googleClientId });
+});
+
+app.post("/api/auth/google", async (req, res) => {
+  const { credential } = req.body;
+  if (!credential || !googleClientId) {
+    return res.status(400).json({ ok: false, message: "Credential Google tidak ditemukan." });
+  }
+
+  try {
+    const ticket = await googleClient.verifyIdToken({ idToken: credential, audience: googleClientId });
+    const profile = ticket.getPayload();
+    if (!profile?.sub || !profile.email || !profile.email_verified) {
+      return res.status(401).json({ ok: false, message: "Akun Google tidak dapat diverifikasi." });
+    }
+    return res.json({
+      ok: true,
+      message: "Login Google berhasil.",
+      user: {
+        fullName: profile.name || profile.email,
+        email: profile.email,
+        avatar: profile.picture || null,
+      },
+    });
+  } catch (_error) {
+    return res.status(401).json({ ok: false, message: "Credential Google tidak valid." });
+  }
+});
+
 app.post("/api/auth/register", (req, res) => {
   const { fullName, email, password } = req.body;
 
