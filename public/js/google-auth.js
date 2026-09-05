@@ -1,161 +1,77 @@
-/**
- * google-auth.js — Integrasi Google Identity Services (Sign in with Google)
- * Dokumentasi resmi: https://developers.google.com/identity/gsi/web
- *
- * === Cara mengaktifkan Google Sign-In ===
- * 1. Buka https://console.cloud.google.com/
- * 2. Buat project → APIs & Services → Credentials → Create OAuth 2.0 Client ID
- * 3. Application type: Web application
- * 4. Authorized JavaScript origins: tambahkan http://localhost:3000
- * 5. Salin Client ID ke window.LAUNDRY_CONFIG.googleClientId di config.js
- *
- * Selama Client ID masih placeholder, tombol berjalan dalam MODE DEMO
- * (simulasi login berhasil tanpa OAuth sungguhan).
- */
 (function (global) {
   "use strict";
 
-  let initialized = false;
-  let initializationPromise = null;
+  const config = global.LAUNDRY_CONFIG;
 
-  /** Cek apakah Client ID masih placeholder */
-  function isPlaceholderClientId(clientId) {
-    return !clientId || clientId.indexOf("YOUR_GOOGLE_CLIENT_ID") === 0;
+  function showError(message) {
+    const form = document.getElementById("form-login");
+    const banner = form?.querySelector(".form-banner");
+    if (!banner) return;
+    banner.hidden = false;
+    banner.textContent = message;
+    banner.className = "form-banner error";
   }
 
-  /**
-   * Decode payload dari JWT credential Google.
-   * Digunakan untuk mengambil nama, email, dan foto profil user.
-   */
-  function decodeJwtPayload(credential) {
+  async function handleCredentialResponse(response) {
     try {
-      const base64 = credential.split(".")[1]
-        .replace(/-/g, "+")
-        .replace(/_/g, "/");
-      return JSON.parse(atob(base64));
-    } catch (_err) {
-      return null;
-    }
-  }
-
-  /** Kirim credential JWT ke backend untuk diverifikasi */
-  async function sendCredentialToServer(credential) {
-    const res = await fetch(window.LAUNDRY_CONFIG.api.google, {
-      method:  "POST",
-      headers: { "Content-Type": "application/json" },
-      body:    JSON.stringify({ credential }),
-    });
-    return res.json();
-  }
-
-  /**
-   * Inisialisasi Google Identity Services.
-   * Dipanggil sekali sebelum renderButton atau prompt.
-   */
-  async function initialize(onSuccess, onError) {
-    if (initialized) return true;
-
-    if (!global.google?.accounts?.id) {
-      onError("Google Identity Services belum dimuat. Cek koneksi internet.");
-      return false;
-    }
-
-    if (!initializationPromise) {
-      initializationPromise = fetch(window.LAUNDRY_CONFIG.api.googleConfig)
-        .then((response) => response.ok ? response.json() : Promise.reject(new Error("Google OAuth belum dikonfigurasi.")))
-        .then((config) => {
-          window.LAUNDRY_CONFIG.googleClientId = config.clientId;
-          global.google.accounts.id.initialize({
-            client_id: config.clientId,
-            callback: async (response) => {
-              try {
-                const result = await sendCredentialToServer(response.credential);
-                const profile = decodeJwtPayload(response.credential);
-                onSuccess(result, profile);
-              } catch (err) {
-                onError(err.message || "Gagal memproses login Google.");
-              }
-            },
-            auto_select: false,
-            cancel_on_tap_outside: true,
-          });
-          initialized = true;
-          return true;
-        })
-        .catch((error) => {
-          initializationPromise = null;
-          onError(error.message);
-          return false;
-        });
-    }
-
-    return initializationPromise;
-  }
-
-  /**
-   * Render tombol resmi Google ke sebuah container DOM.
-   * (Digunakan jika Client ID nyata tersedia)
-   */
-  function renderButton(container, onSuccess, onError) {
-    initialize(onSuccess, onError).then((ready) => {
-      if (!ready) return;
-
-      global.google.accounts.id.renderButton(container, {
-      type:           "standard",
-      theme:          "outline",
-      size:           "large",
-      text:           "signin_with",
-      shape:          "rectangular",
-      logo_alignment: "left",
-        width: container.offsetWidth || 320,
+      const result = await fetch(config.api.google, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ credential: response.credential }),
       });
-    });
+      const payload = await result.json();
+
+      if (!result.ok || !payload.ok) {
+        throw new Error(payload.message || "Login Google gagal.");
+      }
+
+      global.AuthSession.setUser({
+        name: payload.user.fullName,
+        email: payload.user.email,
+        avatar: payload.user.avatar || null,
+        loginMethod: "google",
+        loginAt: new Date().toISOString(),
+      });
+      global.location.assign("/dashboard");
+    } catch (error) {
+      showError(error.message || "Login Google gagal.");
+    }
   }
 
-  /**
-   * Tampilkan One Tap prompt Google.
-   */
-  function prompt(onSuccess, onError) {
-    initialize(onSuccess, onError).then((ready) => {
-      if (!ready) return;
-      global.google.accounts.id.disableAutoSelect();
-      global.google.accounts.id.prompt();
-    });
-  }
+  function init() {
+    const container = document.getElementById("google-signin-button");
+    if (!container) return;
 
-  /**
-   * Mode DEMO — simulasi login Google berhasil.
-   * Aktif saat Client ID masih placeholder.
-   * Membuat user palsu yang terlihat seperti akun Google sungguhan.
-   */
-  function demoLogin(onSuccess) {
-    // Simulasi delay seperti request OAuth asli
-    const demoProfile = {
-      name:    "Demo Google User",
-      email:   "demo.user@gmail.com",
-      picture: null,
-      sub:     "demo_google_id_12345",
+    const render = (clientId) => {
+      if (!global.google?.accounts?.id) return;
+      global.google.accounts.id.initialize({
+        client_id: clientId,
+        callback: handleCredentialResponse,
+        auto_select: false,
+        cancel_on_tap_outside: true,
+      });
+      global.google.accounts.id.renderButton(container, {
+        type: "standard",
+        theme: "outline",
+        size: "large",
+        text: "signin_with",
+        shape: "rectangular",
+        width: Math.min(container.parentElement?.clientWidth || 400, 400),
+      });
     };
 
-    const demoResult = {
-      ok:      true,
-      message: "Login Google (mode demo) berhasil.",
-      user: {
-        fullName: demoProfile.name,
-        email:    demoProfile.email,
-        avatar:   demoProfile.picture,
-      },
-    };
-
-    setTimeout(() => onSuccess(demoResult, demoProfile), 600);
+    fetch("/api/auth/google/config")
+      .then((response) => response.ok ? response.json() : Promise.reject(new Error("Google Sign-In belum dikonfigurasi.")))
+      .then(({ clientId }) => {
+        if (global.google?.accounts?.id) render(clientId);
+        else global.addEventListener("load", () => render(clientId), { once: true });
+      })
+      .catch((error) => showError(error.message));
   }
 
-  global.GoogleAuth = {
-    isPlaceholderClientId,
-    initialize,
-    renderButton,
-    prompt,
-    demoLogin,
-    decodeJwtPayload,
-  };
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init, { once: true });
+  } else {
+    init();
+  }
 })(window);

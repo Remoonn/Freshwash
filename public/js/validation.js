@@ -11,8 +11,10 @@
   function validateLogin(data) {
     const errors = {};
 
-    if (!data.identifier || !data.identifier.trim()) {
-      errors.identifier = "Username atau email wajib diisi.";
+    if (!data.email || !data.email.trim()) {
+      errors.email = "Email wajib diisi.";
+    } else if (!isEmail(data.email)) {
+      errors.email = "Masukkan alamat email yang valid.";
     }
 
     if (!data.password) {

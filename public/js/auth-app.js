@@ -6,7 +6,6 @@
  *  - Show/hide password toggle
  *  - Helper UI: error, loading, banner
  *  - Modal Lupa Password
- *  - Google Sign-In initialization (demo mode + OAuth nyata)
  */
 (function (global) {
   "use strict";
@@ -190,78 +189,6 @@
   }
 
   /* =============================================
-     Google Sign-In
-  ============================================= */
-  function initGoogleButton() {
-    const container = document.getElementById("google-btn");
-    const hint      = document.getElementById("google-hint");
-    const loginForm = document.getElementById("form-login");
-    const customBtn = document.getElementById("google-custom-btn");
-
-    /**
-     * Callback setelah Google Sign-In berhasil.
-     * Menyimpan sesi user dan redirect ke dashboard.
-     */
-    const onSuccess = (result, profile) => {
-      if (!result || !result.ok) {
-        onError(result?.message || "Login Google gagal.");
-        return;
-      }
-
-      const name    = profile?.name  || result?.user?.fullName || "Pengguna Google";
-      const email   = profile?.email || result?.user?.email    || "";
-      const avatar  = profile?.picture || null;
-
-      // Simpan data user ke session
-      global.AuthSession.setUser({
-        name,
-        email,
-        avatar,
-        identifier:  email,
-        loginMethod: "google",
-        loginAt:     new Date().toISOString(),
-      });
-
-      ui.showBanner(loginForm, `Selamat datang, ${name}! Mengalihkan...`, "success");
-
-      // Redirect ke dashboard
-      setTimeout(() => { global.location.href = "/dashboard"; }, 600);
-    };
-
-    /** Callback saat Google Sign-In error */
-    const onError = (message) => {
-      if (message === "mode_demo") {
-        // Tidak tampilkan error untuk mode demo — info ditampilkan di hint
-        return;
-      }
-      if (hint) {
-        hint.hidden = false;
-        hint.textContent = message;
-      }
-    };
-
-    if (customBtn) {
-      customBtn.addEventListener("click", () => {
-        customBtn.disabled = true;
-        customBtn.querySelector("span").textContent = "Memproses...";
-        global.GoogleAuth.prompt((result, profile) => {
-          onSuccess(result, profile);
-          customBtn.disabled = false;
-          customBtn.querySelector("span").textContent = "Sign in with Google";
-        }, (message) => {
-          onError(message);
-          customBtn.disabled = false;
-          customBtn.querySelector("span").textContent = "Sign in with Google";
-        });
-      });
-    }
-
-    if (container) {
-      global.GoogleAuth.renderButton(container, onSuccess, onError);
-    }
-  }
-
-  /* =============================================
      Modal Lupa Password
   ============================================= */
   function initForgotModal() {
@@ -352,13 +279,6 @@
 
     /* Handle tombol back/forward browser */
     global.addEventListener("popstate", () => showView(viewFromPath()));
-
-    /* Init Google setelah window selesai load (SDK dimuat async) */
-    if (document.readyState === "complete") {
-      initGoogleButton();
-    } else {
-      global.addEventListener("load", initGoogleButton);
-    }
   }
 
   /* Ekspor ke global agar register.js bisa panggil showView */
