@@ -6,7 +6,6 @@
  *  - Show/hide password toggle
  *  - Helper UI: error, loading, banner
  *  - Modal Lupa Password
- *  - Google Sign-In initialization (demo mode + OAuth nyata)
  */
 (function (global) {
   "use strict";

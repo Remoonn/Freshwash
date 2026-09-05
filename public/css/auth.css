@@ -766,53 +766,6 @@ body {
   background: var(--line);
 }
 
-/* ====================== TOMBOL GOOGLE ====================== */
-/* Mengikuti branding guideline Google:
-   background putih, border #dadce0, teks gelap, ikon resmi */
-.google-btn {
-  width: 100%;
-  min-height: 46px;
-  border-radius: var(--radius-md);
-  border: 1.5px solid #dadce0;
-  background: #fff;
-  color: #3c4043;
-  font-family: var(--font-google);
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 0.1px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  cursor: pointer;
-  transition: background 0.15s, box-shadow 0.15s, border-color 0.15s;
-}
-
-.google-btn:hover {
-  background: #f8f9fa;
-  border-color: #c8d2dc;
-  box-shadow: 0 2px 8px rgba(60,64,67,0.12);
-}
-
-.google-btn:active { background: #e8eaed; }
-
-/* Container Google Identity Services resmi */
-.google-official:empty { display: none; }
-.google-official:not(:empty) {
-  display: flex;
-  justify-content: center;
-  margin-top: 8px;
-}
-
-/* Hint text kecil di bawah tombol Google */
-.hint {
-  margin: 8px 0 0;
-  font-size: 0.72rem;
-  color: var(--muted);
-  text-align: center;
-  line-height: 1.5;
-}
-
 /* ====================== SWITCH LINE ====================== */
 .switch-line {
   margin-top: auto;
