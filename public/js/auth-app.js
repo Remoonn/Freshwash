@@ -198,10 +198,6 @@
     const loginForm = document.getElementById("form-login");
     const customBtn = document.getElementById("google-custom-btn");
 
-    const isPlaceholder = global.GoogleAuth.isPlaceholderClientId(
-      window.LAUNDRY_CONFIG.googleClientId
-    );
-
     /**
      * Callback setelah Google Sign-In berhasil.
      * Menyimpan sesi user dan redirect ke dashboard.
@@ -244,37 +240,23 @@
       }
     };
 
-    // Tampilkan info mode demo di bawah tombol Google
-    if (isPlaceholder && hint) {
-      hint.hidden = false;
-      hint.textContent = "Mode demo aktif — klik tombol untuk simulasi login Google.";
-    }
-
-    /* Tombol kustom Google:
-       - Jika Client ID placeholder → jalankan demoLogin
-       - Jika Client ID nyata     → panggil One Tap prompt */
     if (customBtn) {
       customBtn.addEventListener("click", () => {
-        if (isPlaceholder) {
-          // Tampilkan loading state di tombol
-          customBtn.disabled = true;
-          customBtn.querySelector("span").textContent = "Memproses...";
-
-          // Jalankan simulasi login Google (mode demo)
-          global.GoogleAuth.demoLogin((result, profile) => {
-            onSuccess(result, profile);
-            // Reset tombol jika onSuccess gagal
-            customBtn.disabled = false;
-            customBtn.querySelector("span").textContent = "Sign in with Google";
-          });
-        } else {
-          global.GoogleAuth.prompt(onSuccess, onError);
-        }
+        customBtn.disabled = true;
+        customBtn.querySelector("span").textContent = "Memproses...";
+        global.GoogleAuth.prompt((result, profile) => {
+          onSuccess(result, profile);
+          customBtn.disabled = false;
+          customBtn.querySelector("span").textContent = "Sign in with Google";
+        }, (message) => {
+          onError(message);
+          customBtn.disabled = false;
+          customBtn.querySelector("span").textContent = "Sign in with Google";
+        });
       });
     }
 
-    /* Render tombol resmi Google Identity Services jika Client ID valid */
-    if (container && !isPlaceholder) {
+    if (container) {
       global.GoogleAuth.renderButton(container, onSuccess, onError);
     }
   }

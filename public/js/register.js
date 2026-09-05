@@ -9,7 +9,6 @@
     return {
       fullName:        form.fullName.value.trim(),
       email:           form.email.value.trim(),
-      username:        form.username.value.trim(),
       password:        form.password.value,
       confirmPassword: form.confirmPassword.value,
     };
@@ -35,7 +34,6 @@
         body:    JSON.stringify({
           fullName: data.fullName,
           email:    data.email,
-          username: data.username,
           password: data.password,
         }),
       });
