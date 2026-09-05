@@ -1,7 +1,7 @@
 /**
  * auth.js — Session Manager (FreshWash Laundry App)
  * Menyimpan, membaca, dan menghapus data user dari sessionStorage.
- * Dipakai bersama oleh login.js, register.js, google-auth.js, dan dashboard.js.
+ * Dipakai bersama oleh login.js, register.js, dan dashboard.js.
  */
 (function (global) {
   "use strict";

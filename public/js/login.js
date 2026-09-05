@@ -7,7 +7,7 @@
 
   function collect(form) {
     return {
-      identifier: form.identifier.value.trim(),
+      email:      form.email.value.trim(),
       password:   form.password.value,
     };
   }
@@ -19,13 +19,12 @@
    * 3. Redirect ke dashboard
    */
   function onLoginSuccess(json, data) {
-    const user = json.user || { identifier: data.identifier };
+    const user = json.user || { email: data.email };
 
     // Simpan ke session (dipakai dashboard untuk tampilkan nama)
     global.AuthSession.setUser({
-      name:       user.fullName || user.identifier || "Pengguna",
-      identifier: user.identifier || data.identifier,
-      email:      user.email || "",
+      name:       user.fullName || user.email || "Pengguna",
+      email:      user.email || data.email,
       avatar:     user.avatar || null,
       loginMethod: "manual",
       loginAt:    new Date().toISOString(),
