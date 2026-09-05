@@ -12,7 +12,10 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@types/pg": "^8.23.1",
+    "bcryptjs": "^3.0.3",
     "express": "^5.2.1",
-    "google-auth-library": "^10.9.1"
+    "google-auth-library": "^10.9.1",
+    "pg": "^8.23.0"
   }
 }
